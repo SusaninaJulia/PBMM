@@ -55,15 +55,24 @@ std::vector<std::pair<int, int>> ParsingTable::modification_for_substrings(Graph
     this->rules_length = (*(this->grammar)).rules_count;
     this->matrix = new GpuMatrix(*(this->grammar), graph);
 
-    double ln = ceil(log2(s));
-    for(int i = 1; i <= ln; i++)
+    double ln = 0.0;
+    if (s > string_length / 2) {
+        ln = log2(string_length);
+    }
+    else {
+        ln = ceil(log2(s)) + 1;
+    }
+    for(int i = 1; i < ln; i++)
         this->constructLayer(i);
     
-    std::vector<std::pair<int, int>> correctStrings;        
-    for(int j = 0; j <= string_length - s; j++) {
-        correctStrings.emplace_back(j, s + j);
+    (*(this->matrix)).gpu_to_cpu();
+    std::vector<std::pair<int, int>> correctStrings;
+    for (int sublen = 0; sublen <= s; sublen++) {
+        for(int j = 0; j <= string_length - 1 - sublen; j++) {
+            if ((*(this->matrix)).get_bit(j, sublen + j, 0))
+                correctStrings.emplace_back(j, sublen + j);
+        }
     }
-
     delete matrix;
 
     return correctStrings;
