@@ -1,5 +1,5 @@
 # PBMM
-# PARSING BY MATRIX MULTUPLICATION
+# PARSING BY MATRIX MULTIPLICATION
 
 
 Implementations of Valiant's algorithm and its modification:
