@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
     Grammar grammar = Grammar(argv[1]);
     Graph graph = Graph(argv[2]);
     int s = 0;
-    stringstream sublen(argv[3]);
+    std::stringstream sublen(argv[3]);
     sublen >> s;
 
     ModifiedParsing mod = ModifiedParsing(grammar, graph);
@@ -32,7 +32,11 @@ int main(int argc, char *argv[]) {
     std::cout << "modification:" << std::endl;
     
     std::vector<std::pair<int, int>> res = mod.parseSubString(s);
-    //std::cout << res << std::endl;
+    std::cout << res.size() << std::endl;
+//    for(int i = 0; i < res.size(); i++)
+//    {
+//         std::cout << res[i].first << ", " << res[i].second << std::endl;
+//    }
     auto end = std::chrono::high_resolution_clock::now();
     auto dur = end - begin;
     auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(dur).count();

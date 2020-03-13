@@ -92,13 +92,22 @@ bool ModifiedParsing::parseString() {
     return static_cast<bool>(mzd_read_bit(Ts[0], 0, n - 1));
 }
 std::vector<std::pair<int, int>> ModifiedParsing::parseSubString(int s) {
-    double ln = ceil(log2(s));
-    for(int i = 1; i <= ln; i++)
+    double ln = 0.0;
+    if (s > n / 2) {
+        ln = log2(n);
+    }
+    else {
+        ln = ceil(log2(s)) + 1;
+    }
+    for(int i = 1; i < ln; i++) {
         constructLayer(i);
+    }
     std::vector<std::pair<int, int>> correctStrings;
-    for(int j = 0; j <= n - s; j++) {
-        if (static_cast<bool>(mzd_read_bit(Ts[0], j, s + j)))
-            correctStrings.emplace_back(j, s + j);
+    for (int sublen = 0; sublen <= s; sublen++) {
+        for(int j = 0; j <= n - 1 - sublen; j++) {
+            if (static_cast<bool>(mzd_read_bit(Ts[0], j, sublen + j)))
+                correctStrings.emplace_back(j, sublen + j);
+        }
     }
     return correctStrings;
 }
